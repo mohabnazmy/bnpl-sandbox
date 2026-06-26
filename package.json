@@ -1,12 +1,16 @@
 {
   "name": "bnpl-sandbox",
   "version": "0.1.0",
-  "description": "Deliberately-vulnerable BNPL (Buy-Now-Pay-Later) sandbox — plants security, QA-validation, and product-friction defects in one fintech flow, with a hardened secure twin. Training/demo target.",
-  "license": "UNLICENSED",
   "private": true,
+  "description": "Deliberately-vulnerable BNPL demo — TypeScript monorepo (React frontend + Node/Express backend). Training/security target.",
+  "license": "UNLICENSED",
+  "workspaces": ["packages/*"],
   "scripts": {
-    "start": "node server.js",
-    "start:secure": "SECURE=1 PORT=7484 node server.js",
-    "selftest": "node selftest.js"
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspace=backend && npm run build --workspace=frontend",
+    "start": "npm run start --workspace=backend",
+    "start:secure": "npm run start:secure --workspace=backend",
+    "selftest": "npm run selftest --workspace=backend"
   }
 }

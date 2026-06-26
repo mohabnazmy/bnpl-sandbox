@@ -1,0 +1,22 @@
+{
+  "name": "backend",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "start:secure": "SECURE=1 PORT=7484 tsx src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "selftest": "tsx src/selftest.ts"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}
