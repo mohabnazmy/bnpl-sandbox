@@ -2,15 +2,16 @@
   "name": "bnpl-sandbox",
   "version": "0.1.0",
   "private": true,
-  "description": "Deliberately-vulnerable BNPL demo — TypeScript monorepo (React frontend + Node/Express backend). Training/security target.",
+  "description": "BNPL (Buy-Now-Pay-Later) app — TypeScript monorepo (React frontend + Node/Express/Prisma backend).",
   "license": "UNLICENSED",
   "workspaces": ["packages/*"],
   "scripts": {
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "db:migrate": "npm run db:migrate --workspace=backend",
     "dev:backend": "npm run dev --workspace=backend",
     "dev:frontend": "npm run dev --workspace=frontend",
     "build": "npm run build --workspace=backend && npm run build --workspace=frontend",
-    "start": "npm run start --workspace=backend",
-    "start:secure": "npm run start:secure --workspace=backend",
-    "selftest": "npm run selftest --workspace=backend"
+    "start": "npm run start --workspace=backend"
   }
 }

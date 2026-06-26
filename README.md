@@ -1,60 +1,60 @@
-# BNPL Sandbox
+# BNPL
 
-A **deliberately-vulnerable** Buy-Now-Pay-Later (installment-checkout) demo. TypeScript
-monorepo: **React frontend + Node/Express backend**. It plants three classes of defect in
-**one flow** so a scanner or autonomous agent can exercise all three at once, and ships a
-**hardened secure twin** as the precision baseline.
-
-> ⚠️ **Intentionally insecure.** Training / security-demo target only. Do not deploy on a
-> public network or with real data.
+A Buy-Now-Pay-Later app — TypeScript monorepo with a **React** frontend and a
+**Node / Express / Prisma (PostgreSQL)** backend. Production-structured starting point;
+security test cases will be layered in over time and tracked separately.
 
 ## Monorepo layout
 
 ```
-bnpl-sandbox/
-  package.json            # npm workspaces
-  tsconfig.base.json
+bnpl/
+  docker-compose.yml         # PostgreSQL (:5439)
   packages/
-    backend/              # Node + Express + TypeScript — the vulnerable API + /__truth.json
-      src/server.ts       #   createApp(secure) — vulnerable, or the hardened secure twin
-      src/selftest.ts     #   in-process recall + precision check
-    frontend/             # React + TypeScript + Vite — basic checkout UI
-      src/App.tsx
+    shared/                  # @bnpl/shared — DTOs + API contract (money in minor units)
+    backend/                 # Express + TypeScript + Prisma
+      prisma/schema.prisma   #   User · Agreement · Installment
+      src/
+        config.ts  prisma.ts  app.ts  index.ts
+        middleware/{auth,error}.ts
+        lib/{password,token,finance,mappers,async}.ts
+        modules/{auth,plans,checkout,agreements}.ts
+    frontend/                # React + TypeScript + Vite (React Router + auth context)
+      src/{api,auth,pages,components}/
 ```
 
-## The three defect classes
+## Domain (thin slice)
 
-| Class | Planted cases |
-|---|---|
-| **Security** | BOLA, idempotency-replay (double-charge), negative-amount + client-set credit_limit (mass-assign) |
-| **QA validation** | accepts non-numeric amount, client-only national-ID validation, validation error that leaks DB internals |
-| **Product friction** | redirect-to-unexpected after a valid checkout, dead-end confirmation, MFA modal that re-loops on the correct code |
-
-`SECURE=1` hardens every one — the secure twin must produce **zero** findings.
+Auth (register / login with JWT + bcrypt) · per-user **credit limit** · **installment plans**
+(3 / 6 / 12 months, flat fee by term) · **checkout** that creates an **agreement** with a
+generated repayment **schedule** · a **dashboard** of agreements and their installments.
+All money is in **minor units** (piastres) with integer-only arithmetic.
 
 ## Run
 
 ```bash
-npm install                 # installs all workspaces
+npm install
+npm run db:up                                  # start PostgreSQL (:5439)
+npm run db:migrate --workspace=backend         # apply migrations + generate client
+cp packages/backend/.env.example packages/backend/.env   # (already present in dev)
 
-npm run dev:backend         # vulnerable API on :7483
-npm run start:secure        # secure twin on :7484
-npm run dev:frontend        # React UI on :5173 (proxies /api → backend)
-
-npm run selftest            # prove the app matches its own /__truth.json
-npm run build               # typecheck + build both packages
+npm run dev:backend     # API on http://localhost:7483
+npm run dev:frontend    # UI  on http://localhost:5173  (proxies /api → backend)
+npm run build           # typecheck + build both packages
 ```
 
-## Ground truth — `GET /__truth.json`
+## API
 
-The backend serves its own machine-readable ground truth: each case declares its class,
-trigger, and expected verdict (the secure twin expects `secure` for every case). Any grader
-scores **recall** (vulnerable) + **precision** (secure) against this one manifest.
+| Method | Path | Auth | Purpose |
+|---|---|---|---|
+| POST | `/api/auth/register` | — | create account → `{token, user}` |
+| POST | `/api/auth/login` | — | `{token, user}` |
+| GET | `/api/auth/me` | ✓ | current user |
+| GET | `/api/plans?amount=<minor>` | ✓ | installment options for an amount |
+| POST | `/api/checkout` | ✓ | create an agreement (`{amount, months, merchant}`) |
+| GET | `/api/agreements` | ✓ | list the user's agreements |
+| GET | `/api/agreements/:id` | ✓ | agreement + repayment schedule |
 
-Verdict enum: `vuln · leak · friction · crash · secure`.
-Test accounts: `Bearer tok-alice` (id 1) · `Bearer tok-bob` (id 2); installment `1` is alice's, `2` is bob's (BOLA target).
+## Stack
 
-## Pointing a scanner at it
-
-Ordinary HTTP app — point any DAST tool or autonomous agent at `http://localhost:7483`
-(and `:7484` for the clean baseline) and score its findings against `/__truth.json`.
+TypeScript · React 18 + Vite + React Router · Express · Prisma + PostgreSQL ·
+zod (validation) · jsonwebtoken · bcryptjs · npm workspaces.

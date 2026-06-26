@@ -1,60 +1,82 @@
-import { useState } from 'react';
+import type { ReactNode } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useAuth } from './auth/AuthContext';
+import { Nav } from './components/Nav';
+import { LoginPage } from './pages/LoginPage';
+import { RegisterPage } from './pages/RegisterPage';
+import { DashboardPage } from './pages/DashboardPage';
+import { CheckoutPage } from './pages/CheckoutPage';
+import { AgreementDetailPage } from './pages/AgreementDetailPage';
 
-const TOKEN = 'tok-alice'; // demo session (user "alice")
+function ProtectedRoute({ children }: { children: ReactNode }) {
+  const { token, loading } = useAuth();
+  const location = useLocation();
 
-async function api(path: string, body: unknown) {
-  const res = await fetch(path, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', authorization: `Bearer ${TOKEN}` },
-    body: JSON.stringify(body),
-  });
-  const text = await res.text();
-  try { return { status: res.status, json: JSON.parse(text) }; } catch { return { status: res.status, json: text }; }
+  if (loading) {
+    return <div className="page-center">Loading…</div>;
+  }
+  if (!token) {
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  }
+  return (
+    <div className="app-shell">
+      <Nav />
+      <main className="app-main">{children}</main>
+    </div>
+  );
+}
+
+function PublicOnlyRoute({ children }: { children: ReactNode }) {
+  const { token, loading } = useAuth();
+  if (loading) return <div className="page-center">Loading…</div>;
+  if (token) return <Navigate to="/" replace />;
+  return <>{children}</>;
 }
 
 export function App() {
-  const [amount, setAmount] = useState('850');
-  const [nationalId, setNationalId] = useState('29001011234567');
-  const [phone, setPhone] = useState('+201000000000');
-  const [email, setEmail] = useState('alice@example.com');
-  const [otp, setOtp] = useState('');
-  const [result, setResult] = useState<unknown>(null);
-
-  const checkout = async () => setResult(await api('/api/checkout', { amount, national_id: nationalId, phone, email }));
-  const verifyOtp = async () => setResult(await api('/api/mfa/verify', { code: otp }));
-
-  const field = (label: string, value: string, set: (v: string) => void) => (
-    <label style={{ display: 'block', margin: '8px 0' }}>
-      {label}<br />
-      <input value={value} onChange={(e) => set(e.target.value)} style={{ width: 280, padding: 6 }} />
-    </label>
-  );
-
   return (
-    <main style={{ fontFamily: 'system-ui, sans-serif', maxWidth: 460, margin: '40px auto' }}>
-      <h1>BNPL — Installment Checkout</h1>
-      <p style={{ color: '#b00' }}>⚠️ Deliberately-vulnerable demo. Do not use real data.</p>
-
-      <section>
-        <h2>Checkout</h2>
-        {field('Amount (EGP)', amount, setAmount)}
-        {field('National ID', nationalId, setNationalId)}
-        {field('Phone', phone, setPhone)}
-        {field('Email', email, setEmail)}
-        <button onClick={checkout} style={{ padding: '8px 16px' }}>Pay in installments</button>
-      </section>
-
-      <section style={{ marginTop: 24 }}>
-        <h2>Confirm OTP</h2>
-        {field('One-time code', otp, setOtp)}
-        <button onClick={verifyOtp} style={{ padding: '8px 16px' }}>Verify</button>
-      </section>
-
-      {result != null && (
-        <pre style={{ marginTop: 24, background: '#f4f4f4', padding: 12, overflow: 'auto' }}>
-          {JSON.stringify(result, null, 2)}
-        </pre>
-      )}
-    </main>
+    <Routes>
+      <Route
+        path="/login"
+        element={
+          <PublicOnlyRoute>
+            <LoginPage />
+          </PublicOnlyRoute>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <PublicOnlyRoute>
+            <RegisterPage />
+          </PublicOnlyRoute>
+        }
+      />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/checkout"
+        element={
+          <ProtectedRoute>
+            <CheckoutPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/agreements/:id"
+        element={
+          <ProtectedRoute>
+            <AgreementDetailPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }

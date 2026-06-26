@@ -1,0 +1,459 @@
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --border: #e3e8f0;
+  --text: #1b2333;
+  --muted: #6b7689;
+  --primary: #4f46e5;
+  --primary-dark: #4338ca;
+  --primary-soft: #eef2ff;
+  --success: #15803d;
+  --success-soft: #dcfce7;
+  --warning: #b45309;
+  --warning-soft: #fef3c7;
+  --danger: #b91c1c;
+  --danger-soft: #fee2e2;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 4px 16px rgba(16, 24, 40, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.plain-link,
+.plain-link:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* ---- layout ---- */
+.app-shell {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.app-main {
+  flex: 1;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+.page-center {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+.page-title {
+  font-size: 1.75rem;
+  margin: 0 0 4px;
+}
+.section {
+  margin-top: 32px;
+}
+.section-title {
+  font-size: 1.1rem;
+  margin: 0 0 12px;
+}
+
+/* ---- nav ---- */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.nav-brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--text);
+}
+.nav-brand:hover {
+  text-decoration: none;
+}
+.nav-brand-accent {
+  color: var(--primary);
+  font-weight: 600;
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.nav-user {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---- buttons ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+}
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+.btn-ghost {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text);
+}
+.btn-ghost:hover:not(:disabled) {
+  background: var(--bg);
+}
+.btn-block {
+  width: 100%;
+}
+.btn-lg {
+  padding: 13px 22px;
+  font-size: 1rem;
+  margin-top: 20px;
+}
+
+/* ---- cards ---- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+.card-clickable {
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.1s;
+}
+.card-clickable:hover {
+  border-color: var(--primary);
+}
+
+/* ---- alerts ---- */
+.alert {
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.92rem;
+  margin-bottom: 16px;
+}
+.alert-error {
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid #fca5a5;
+}
+
+/* ---- forms ---- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.form-row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.form-row .field {
+  flex: 1 1 180px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.field input {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: #fff;
+  color: var(--text);
+}
+.field input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+/* ---- auth pages ---- */
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: var(--shadow);
+}
+.auth-title {
+  margin: 0 0 4px;
+  font-size: 1.5rem;
+}
+.auth-subtitle {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.auth-foot {
+  margin: 20px 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* ---- dashboard ---- */
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.credit-line {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+.agreement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+.agreement-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.agreement-merchant {
+  font-weight: 600;
+}
+.agreement-principal {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+.agreement-meta {
+  margin-top: 6px;
+  font-size: 0.88rem;
+}
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+.empty-title {
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ---- badges ---- */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.badge-active,
+.badge-due {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+.badge-settled,
+.badge-paid {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+/* ---- checkout / plans ---- */
+.checkout-form-card {
+  margin-top: 16px;
+}
+.plans-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+.plan-card {
+  position: relative;
+}
+.plan-card-selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary);
+}
+.plan-months {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.plan-monthly {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 6px 0 12px;
+}
+.plan-monthly-sub {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-left: 4px;
+}
+.plan-detail {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.plan-detail > div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+}
+.plan-detail dt {
+  color: var(--muted);
+}
+.plan-detail dd {
+  margin: 0;
+  font-weight: 600;
+}
+.plan-selected-tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* ---- detail ---- */
+.back-link {
+  display: inline-block;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+.detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.summary-label {
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+.summary-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.table-card {
+  padding: 0;
+  overflow: hidden;
+}
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+.schedule-table th,
+.schedule-table td {
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.schedule-table thead th {
+  background: var(--bg);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+.schedule-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.schedule-table .num {
+  text-align: right;
+}
+
+.money {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

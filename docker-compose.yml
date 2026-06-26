@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: bnpl
+      POSTGRES_PASSWORD: bnpl
+      POSTGRES_DB: bnpl
+    ports:
+      - "5439:5432"
+    volumes:
+      - bnpl-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bnpl"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  bnpl-pgdata:
