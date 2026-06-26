@@ -1,18 +1,15 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// Dev server proxies API + server-rendered friction routes to the backend (:7483),
-// so the React app and the vulnerable API share an origin during development.
+// The dev server proxies /api to the backend. Target is configurable so it works
+// both locally (localhost) and in Docker (the `backend` service).
+const backend = process.env.BACKEND_URL || 'http://localhost:7483';
+
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: true, // bind 0.0.0.0 so it's reachable from outside the container
     port: 5173,
-    proxy: {
-      '/api': 'http://localhost:7483',
-      '/checkout': 'http://localhost:7483',
-      '/confirmation': 'http://localhost:7483',
-      '/promo': 'http://localhost:7483',
-      '/__truth.json': 'http://localhost:7483',
-    },
+    proxy: { '/api': backend },
   },
 });

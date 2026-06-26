@@ -15,5 +15,46 @@ services:
       timeout: 5s
       retries: 10
 
+  backend:
+    image: node:22
+    working_dir: /app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://bnpl:bnpl@db:5432/bnpl?schema=public"
+      JWT_SECRET: "dev-secret-change-me"
+      PORT: "7483"
+    ports:
+      - "7483:7483"
+    volumes:
+      - .:/app
+      - backend_node_modules:/app/node_modules
+    command: >
+      sh -c "npm install &&
+             cd backend &&
+             npx prisma generate &&
+             npx prisma migrate deploy &&
+             npx tsx src/index.ts"
+
+  frontend:
+    image: node:22
+    working_dir: /app
+    depends_on:
+      - backend
+    environment:
+      BACKEND_URL: "http://backend:7483"
+    ports:
+      - "5180:5173"
+    volumes:
+      - .:/app
+      - frontend_node_modules:/app/node_modules
+    command: >
+      sh -c "npm install &&
+             cd frontend &&
+             npx vite --host --port 5173"
+
 volumes:
   bnpl-pgdata:
+  backend_node_modules:
+  frontend_node_modules:
