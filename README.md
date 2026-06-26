@@ -11,13 +11,13 @@ bnpl/
   docker-compose.yml         # PostgreSQL (:5439)
   packages/
     shared/                  # @bnpl/shared — DTOs + API contract (money in minor units)
-    backend/                 # Express + TypeScript + Prisma
+    backend/                 # Express + TypeScript + Prisma — hexagonal (ports & adapters)
       prisma/schema.prisma   #   User · Agreement · Installment
       src/
-        config.ts  prisma.ts  app.ts  index.ts
-        middleware/{auth,error}.ts
-        lib/{password,token,finance,mappers,async}.ts
-        modules/{auth,plans,checkout,agreements}.ts
+        domain/              #   pure core: finance.ts, errors.ts, ports.ts (no Express/Prisma)
+        application/         #   use-case services (depend on ports only)
+        infrastructure/      #   adapters: prisma/ (repos), security/ (bcrypt, jwt), http/ (express)
+        config.ts  index.ts  #   index.ts = composition root (wires adapters → ports)
     frontend/                # React + TypeScript + Vite (React Router + auth context)
       src/{api,auth,pages,components}/
 ```
