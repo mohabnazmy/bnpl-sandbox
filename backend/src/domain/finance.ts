@@ -1,4 +1,4 @@
-import { ALLOWED_MONTHS, Months, PlanOption } from '@bnpl/shared';
+import { ALLOWED_MONTHS, Months, PlanOption } from '../contract';
 
 /** Flat fee on principal by term. Integer math throughout (minor units). */
 const FEE_BY_MONTHS: Record<Months, number> = { 3: 0, 6: 0.05, 12: 0.12 };

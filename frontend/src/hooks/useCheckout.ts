@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import type { Agreement, Months } from '@bnpl/shared';
+import type { Agreement, Months } from '../types';
 import * as api from '../api/client';
 import { ApiRequestError } from '../api/client';
 

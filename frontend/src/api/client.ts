@@ -8,7 +8,7 @@ import type {
   RegisterRequest,
   LoginRequest,
   ApiError,
-} from '@bnpl/shared';
+} from '../types';
 
 const TOKEN_KEY = 'bnpl.token';
 

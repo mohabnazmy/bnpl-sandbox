@@ -1,5 +1,5 @@
 /**
- * @bnpl/shared — DTOs + API contract shared by backend and frontend.
+ * API contract types — local copy (keep in sync with the other app).
  *
  * Money is in MINOR UNITS (piastres; 1 EGP = 100). Integer math only —
  * never floats — to avoid rounding drift in financial calculations.

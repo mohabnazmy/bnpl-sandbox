@@ -1,4 +1,4 @@
-import type { AuthResponse, User } from '@bnpl/shared';
+import type { AuthResponse, User } from '../contract';
 import type { UserRepository, PasswordHasher, TokenService } from '../domain/ports';
 import { ConflictError, AuthError, NotFoundError } from '../domain/errors';
 import { toUser } from './mappers';

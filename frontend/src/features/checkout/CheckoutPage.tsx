@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { PlanOption } from '@bnpl/shared';
+import type { PlanOption } from '../../types';
 import { usePlans } from '../../hooks/usePlans';
 import { useCheckout } from '../../hooks/useCheckout';
 import { Card } from '../../ui/Card';

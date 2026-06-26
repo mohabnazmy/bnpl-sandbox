@@ -1,4 +1,4 @@
-import type { User, Agreement, Installment, Months, AgreementStatus, InstallmentStatus } from '@bnpl/shared';
+import type { User, Agreement, Installment, Months, AgreementStatus, InstallmentStatus } from '../contract';
 import type { UserRecord, AgreementRecord, InstallmentRecord } from '../domain/ports';
 
 export const toUser = (u: UserRecord): User => ({

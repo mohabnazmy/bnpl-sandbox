@@ -1,6 +1,6 @@
 import { Router, RequestHandler } from 'express';
 import { z } from 'zod';
-import { ALLOWED_MONTHS, Months } from '@bnpl/shared';
+import { ALLOWED_MONTHS, Months } from '../../../contract';
 import { asyncHandler } from '../async';
 import { AuthedRequest } from '../middleware/auth';
 import type { CheckoutService } from '../../../application/checkout.service';

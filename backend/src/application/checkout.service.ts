@@ -1,4 +1,4 @@
-import type { Agreement, Months } from '@bnpl/shared';
+import type { Agreement, Months } from '../contract';
 import type { UserRepository, AgreementRepository } from '../domain/ports';
 import { NotFoundError, BusinessRuleError } from '../domain/errors';
 import { planOptions, buildSchedule } from '../domain/finance';

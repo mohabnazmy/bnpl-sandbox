@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import type { PlansResponse, PlanOption } from '@bnpl/shared';
+import type { PlansResponse, PlanOption } from '../types';
 import * as api from '../api/client';
 import { ApiRequestError } from '../api/client';
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { Agreement, AgreementDetail } from '@bnpl/shared';
+import type { Agreement, AgreementDetail } from '../types';
 import * as api from '../api/client';
 
 interface UseAgreementListResult {

@@ -6,7 +6,7 @@ import {
   useCallback,
   type ReactNode,
 } from 'react';
-import type { User } from '@bnpl/shared';
+import type { User } from '../types';
 import * as api from '../api/client';
 
 interface AuthState {

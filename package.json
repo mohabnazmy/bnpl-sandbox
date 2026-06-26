@@ -4,7 +4,7 @@
   "private": true,
   "description": "BNPL (Buy-Now-Pay-Later) app — TypeScript monorepo (React frontend + Node/Express/Prisma backend).",
   "license": "UNLICENSED",
-  "workspaces": ["shared", "backend", "frontend"],
+  "workspaces": ["backend", "frontend"],
   "scripts": {
     "db:up": "docker compose up -d db",
     "db:down": "docker compose down",

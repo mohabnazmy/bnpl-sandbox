@@ -1,4 +1,4 @@
-import type { PlansResponse } from '@bnpl/shared';
+import type { PlansResponse } from '../contract';
 import type { UserRepository } from '../domain/ports';
 import { NotFoundError } from '../domain/errors';
 import { planOptions } from '../domain/finance';

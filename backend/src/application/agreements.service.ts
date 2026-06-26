@@ -1,4 +1,4 @@
-import type { Agreement, AgreementDetail } from '@bnpl/shared';
+import type { Agreement, AgreementDetail } from '../contract';
 import type { AgreementRepository } from '../domain/ports';
 import { NotFoundError } from '../domain/errors';
 import { toAgreement, toInstallment } from './mappers';
