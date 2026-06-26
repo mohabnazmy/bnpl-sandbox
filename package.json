@@ -1,0 +1,12 @@
+{
+  "name": "bnpl-sandbox",
+  "version": "0.1.0",
+  "description": "Deliberately-vulnerable BNPL (Buy-Now-Pay-Later) sandbox — plants security, QA-validation, and product-friction defects in one fintech flow, with a hardened secure twin. Training/demo target.",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "start:secure": "SECURE=1 PORT=7484 node server.js",
+    "selftest": "node selftest.js"
+  }
+}

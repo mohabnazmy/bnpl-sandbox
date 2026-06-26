@@ -1,0 +1,9 @@
+services:
+  bnpl-vuln:
+    build: .
+    environment: { PORT: "7483", SECURE: "0" }
+    ports: ["7483:7483"]
+  bnpl-secure:
+    build: .
+    environment: { PORT: "7484", SECURE: "1" }
+    ports: ["7484:7484"]
