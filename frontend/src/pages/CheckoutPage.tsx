@@ -1,10 +1,10 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { PlanOption } from '../../types';
-import { usePlans } from '../../hooks/usePlans';
-import { useCheckout } from '../../hooks/useCheckout';
-import { Card } from '../../ui/Card';
-import { Money, formatMoney } from '../../ui/Money';
+import type { PlanOption } from '../types';
+import { usePlans } from '../hooks/usePlans';
+import { useCheckout } from '../hooks/useCheckout';
+import { Card } from '../components/Card';
+import { Money, formatMoney } from '../components/Money';
 
 /** Converts an EGP string (major units) to minor units (piastres). */
 function egpToMinor(egp: string): number | null {

@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { Nav } from '../ui/Nav';
-import { LoginPage } from '../features/auth/LoginPage';
-import { RegisterPage } from '../features/auth/RegisterPage';
-import { DashboardPage } from '../features/agreements/DashboardPage';
-import { CheckoutPage } from '../features/checkout/CheckoutPage';
-import { AgreementDetailPage } from '../features/agreements/AgreementDetailPage';
+import { useAuth } from './hooks/useAuth';
+import { Nav } from './components/Nav';
+import { LoginPage } from './pages/LoginPage';
+import { RegisterPage } from './pages/RegisterPage';
+import { DashboardPage } from './pages/DashboardPage';
+import { CheckoutPage } from './pages/CheckoutPage';
+import { AgreementDetailPage } from './pages/AgreementDetailPage';
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { token, loading } = useAuth();

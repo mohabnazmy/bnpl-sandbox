@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import { useAgreementList } from '../../hooks/useAgreements';
-import { Card } from '../../ui/Card';
-import { Money, formatMoney } from '../../ui/Money';
+import { useAuth } from '../hooks/useAuth';
+import { useAgreementList } from '../hooks/useAgreements';
+import { Card } from '../components/Card';
+import { Money, formatMoney } from '../components/Money';
 
 export function DashboardPage() {
   const { user } = useAuth();

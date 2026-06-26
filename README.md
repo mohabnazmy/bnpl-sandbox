@@ -18,11 +18,11 @@ bnpl/
       application/         #   use-case services (depend on ports only)
       infrastructure/      #   adapters: prisma/ (repos), security/ (bcrypt, jwt), http/ (express)
       config.ts  index.ts  #   index.ts = composition root (wires adapters → ports)
-  frontend/                # React + TypeScript + Vite — layered (api / hooks / features / ui)
+  frontend/                # React + TypeScript + Vite — layered (api / hooks / pages / components)
     src/api               #   typed client — the only HTTP layer
     src/hooks             #   use-cases (useAuth, usePlans, useCheckout, useAgreements)
-    src/features          #   feature UI (auth, checkout, agreements); ui/ app/ lib/ alongside
-    src/types.ts          #   API contract types (frontend copy)
+    src/pages             #   page components (one per route) — call hooks, never the api directly
+    src/components        #   reusable UI (Money, Card, Nav); App.tsx (router), lib/, types.ts alongside
 ```
 
 ## Domain (thin slice)

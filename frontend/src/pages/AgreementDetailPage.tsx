@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
-import { useAgreement } from '../../hooks/useAgreements';
-import { Card } from '../../ui/Card';
-import { Money } from '../../ui/Money';
+import { useAgreement } from '../hooks/useAgreements';
+import { Card } from '../components/Card';
+import { Money } from '../components/Money';
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
