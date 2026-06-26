@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: bnpl
       POSTGRES_DB: bnpl
     ports:
-      - "5439:5432"
+      - "18432:5432"
     volumes:
       - bnpl-pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -24,9 +24,9 @@ services:
     environment:
       DATABASE_URL: "postgresql://bnpl:bnpl@db:5432/bnpl?schema=public"
       JWT_SECRET: "dev-secret-change-me"
-      PORT: "7483"
+      PORT: "18483"
     ports:
-      - "7483:7483"
+      - "18483:18483"
     volumes:
       - .:/app
       - backend_node_modules:/app/node_modules
@@ -43,16 +43,16 @@ services:
     depends_on:
       - backend
     environment:
-      BACKEND_URL: "http://backend:7483"
+      BACKEND_URL: "http://backend:18483"
     ports:
-      - "5180:5173"
+      - "18173:18173"
     volumes:
       - .:/app
       - frontend_node_modules:/app/node_modules
     command: >
       sh -c "npm install &&
              cd frontend &&
-             npx vite --host --port 5173"
+             npx vite --host --port 18173"
 
 volumes:
   bnpl-pgdata:

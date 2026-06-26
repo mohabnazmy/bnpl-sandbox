@@ -8,7 +8,7 @@ security test cases will be layered in over time and tracked separately.
 
 ```
 bnpl/
-  docker-compose.yml       # PostgreSQL (:5439)
+  docker-compose.yml       # PostgreSQL (:18432)
   package.json             # npm workspaces: backend · frontend
   backend/                 # Express + TypeScript + Prisma — hexagonal (ports & adapters)
     src/contract.ts        #   API contract types (money in minor units)
@@ -36,12 +36,12 @@ All money is in **minor units** (piastres) with integer-only arithmetic.
 
 ```bash
 npm install
-npm run db:up                                  # start PostgreSQL (:5439)
+npm run db:up                                  # start PostgreSQL (:18432)
 npm run db:migrate --workspace=backend         # apply migrations + generate client
-cp packages/backend/.env.example packages/backend/.env   # (already present in dev)
+cp backend/.env.example backend/.env   # (already present in dev)
 
-npm run dev:backend     # API on http://localhost:7483
-npm run dev:frontend    # UI  on http://localhost:5173  (proxies /api → backend)
+npm run dev:backend     # API on http://localhost:18483
+npm run dev:frontend    # UI  on http://localhost:18173  (proxies /api → backend)
 npm run build           # typecheck + build both packages
 ```
 
