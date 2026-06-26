@@ -8,18 +8,18 @@ security test cases will be layered in over time and tracked separately.
 
 ```
 bnpl/
-  docker-compose.yml         # PostgreSQL (:5439)
-  packages/
-    shared/                  # @bnpl/shared — DTOs + API contract (money in minor units)
-    backend/                 # Express + TypeScript + Prisma — hexagonal (ports & adapters)
-      prisma/schema.prisma   #   User · Agreement · Installment
-      src/
-        domain/              #   pure core: finance.ts, errors.ts, ports.ts (no Express/Prisma)
-        application/         #   use-case services (depend on ports only)
-        infrastructure/      #   adapters: prisma/ (repos), security/ (bcrypt, jwt), http/ (express)
-        config.ts  index.ts  #   index.ts = composition root (wires adapters → ports)
-    frontend/                # React + TypeScript + Vite (React Router + auth context)
-      src/{api,auth,pages,components}/
+  docker-compose.yml       # PostgreSQL (:5439)
+  package.json             # npm workspaces: shared · backend · frontend
+  shared/                  # @bnpl/shared — DTOs + API contract (money in minor units)
+  backend/                 # Express + TypeScript + Prisma — hexagonal (ports & adapters)
+    prisma/schema.prisma   #   User · Agreement · Installment
+    src/
+      domain/              #   pure core: finance.ts, errors.ts, ports.ts (no Express/Prisma)
+      application/         #   use-case services (depend on ports only)
+      infrastructure/      #   adapters: prisma/ (repos), security/ (bcrypt, jwt), http/ (express)
+      config.ts  index.ts  #   index.ts = composition root (wires adapters → ports)
+  frontend/                # React + TypeScript + Vite (React Router + auth context)
+    src/{api,auth,pages,components}/
 ```
 
 ## Domain (thin slice)
