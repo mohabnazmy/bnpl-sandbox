@@ -1,33 +1,12 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import type { Agreement } from '@bnpl/shared';
-import { useAuth } from '../auth/AuthContext';
-import * as api from '../api/client';
-import { Card } from '../components/Card';
-import { Money, formatMoney } from '../components/Money';
+import { useAuth } from '../../hooks/useAuth';
+import { useAgreementList } from '../../hooks/useAgreements';
+import { Card } from '../../ui/Card';
+import { Money, formatMoney } from '../../ui/Money';
 
 export function DashboardPage() {
   const { user } = useAuth();
-  const [agreements, setAgreements] = useState<Agreement[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    api
-      .getAgreements()
-      .then(({ agreements }) => {
-        if (!cancelled) setAgreements(agreements);
-      })
-      .catch((err) => {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Failed to load agreements');
-          setAgreements([]);
-        }
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const { data: agreements, error } = useAgreementList();
 
   return (
     <div className="dashboard">

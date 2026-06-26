@@ -1,10 +1,10 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { PlansResponse, PlanOption } from '@bnpl/shared';
-import * as api from '../api/client';
-import { ApiRequestError } from '../api/client';
-import { Card } from '../components/Card';
-import { Money, formatMoney } from '../components/Money';
+import type { PlanOption } from '@bnpl/shared';
+import { usePlans } from '../../hooks/usePlans';
+import { useCheckout } from '../../hooks/useCheckout';
+import { Card } from '../../ui/Card';
+import { Money, formatMoney } from '../../ui/Money';
 
 /** Converts an EGP string (major units) to minor units (piastres). */
 function egpToMinor(egp: string): number | null {
@@ -16,60 +16,42 @@ function egpToMinor(egp: string): number | null {
 export function CheckoutPage() {
   const navigate = useNavigate();
 
+  const { plans, options, creditLimit, loading: loadingPlans, error: plansError, fetchPlans } =
+    usePlans();
+  const { submit, loading: submitting, error: checkoutError } = useCheckout();
+
   const [amount, setAmount] = useState('');
   const [merchant, setMerchant] = useState('');
-  const [plans, setPlans] = useState<PlansResponse | null>(null);
   const [selected, setSelected] = useState<PlanOption | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
-  const [loadingPlans, setLoadingPlans] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // A local validation error takes precedence; otherwise surface whichever hook errored.
+  const error = validationError ?? plansError ?? checkoutError;
 
   async function handleGetPlans(e: FormEvent) {
     e.preventDefault();
-    setError(null);
-    setPlans(null);
+    setValidationError(null);
     setSelected(null);
 
     const minor = egpToMinor(amount);
     if (minor === null) {
-      setError('Enter a valid purchase amount in EGP.');
+      setValidationError('Enter a valid purchase amount in EGP.');
       return;
     }
     if (!merchant.trim()) {
-      setError('Enter the merchant name.');
+      setValidationError('Enter the merchant name.');
       return;
     }
 
-    setLoadingPlans(true);
-    try {
-      const res = await api.getPlans(minor);
-      setPlans(res);
-      if (res.options.length === 0) {
-        setError('No installment plans are available for this amount.');
-      }
-    } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : 'Could not load plans.');
-    } finally {
-      setLoadingPlans(false);
-    }
+    await fetchPlans(minor);
   }
 
   async function handleConfirm() {
     if (!plans || !selected) return;
-    setError(null);
-    setSubmitting(true);
-    try {
-      const { agreement } = await api.checkout({
-        amount: plans.amount,
-        months: selected.months,
-        merchant: merchant.trim(),
-      });
+    setValidationError(null);
+    const agreement = await submit(plans.amount, selected.months, merchant.trim());
+    if (agreement) {
       navigate(`/agreements/${agreement.id}`);
-    } catch (err) {
-      // Over-credit-limit and validation errors arrive as ApiRequestError.
-      setError(err instanceof ApiRequestError ? err.message : 'Checkout failed.');
-      setSubmitting(false);
     }
   }
 
@@ -110,18 +92,18 @@ export function CheckoutPage() {
         </form>
       </Card>
 
-      {plans && plans.options.length > 0 && (
+      {plans && options.length > 0 && (
         <section className="section">
           <div className="plans-head">
             <h2 className="section-title">Choose a plan</h2>
             <span className="muted">
               Purchase <Money amount={plans.amount} /> · credit limit{' '}
-              {formatMoney(plans.creditLimit)}
+              {creditLimit !== null ? formatMoney(creditLimit) : ''}
             </span>
           </div>
 
           <div className="plan-grid">
-            {plans.options.map((opt) => {
+            {options.map((opt) => {
               const isSelected = selected?.months === opt.months;
               return (
                 <Card

@@ -1,12 +1,13 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../auth/AuthContext';
-import { ApiRequestError } from '../api/client';
+import { useAuth } from '../../hooks/useAuth';
+import { getErrorMessage } from '../../lib/getErrorMessage';
 
-export function LoginPage() {
-  const { login } = useAuth();
+export function RegisterPage() {
+  const { register } = useAuth();
   const navigate = useNavigate();
 
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -17,10 +18,10 @@ export function LoginPage() {
     setError(null);
     setSubmitting(true);
     try {
-      await login(email, password);
+      await register(email, password, name);
       navigate('/');
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : 'Login failed');
+      setError(getErrorMessage(err, 'Registration failed'));
     } finally {
       setSubmitting(false);
     }
@@ -29,12 +30,22 @@ export function LoginPage() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1 className="auth-title">Welcome back</h1>
-        <p className="auth-subtitle">Log in to manage your installment plans.</p>
+        <h1 className="auth-title">Create your account</h1>
+        <p className="auth-subtitle">Split purchases into easy monthly payments.</p>
 
         {error && <div className="alert alert-error">{error}</div>}
 
         <form onSubmit={handleSubmit} className="form">
+          <label className="field">
+            <span className="field-label">Name</span>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              autoComplete="name"
+              required
+            />
+          </label>
           <label className="field">
             <span className="field-label">Email</span>
             <input
@@ -51,17 +62,17 @@ export function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
+              autoComplete="new-password"
               required
             />
           </label>
           <button type="submit" className="btn btn-primary btn-block" disabled={submitting}>
-            {submitting ? 'Logging in…' : 'Log in'}
+            {submitting ? 'Creating account…' : 'Create account'}
           </button>
         </form>
 
         <p className="auth-foot">
-          No account? <Link to="/register">Create one</Link>
+          Already have an account? <Link to="/login">Log in</Link>
         </p>
       </div>
     </div>

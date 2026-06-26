@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import type { AgreementDetail } from '@bnpl/shared';
-import * as api from '../api/client';
-import { Card } from '../components/Card';
-import { Money } from '../components/Money';
+import { useAgreement } from '../../hooks/useAgreements';
+import { Card } from '../../ui/Card';
+import { Money } from '../../ui/Money';
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -17,26 +15,7 @@ function formatDate(iso: string): string {
 
 export function AgreementDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const [detail, setDetail] = useState<AgreementDetail | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!id) return;
-    let cancelled = false;
-    setDetail(null);
-    setError(null);
-    api
-      .getAgreement(id)
-      .then((d) => {
-        if (!cancelled) setDetail(d);
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : 'Failed to load agreement');
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [id]);
+  const { data: detail, error } = useAgreement(id);
 
   if (error) {
     return (
